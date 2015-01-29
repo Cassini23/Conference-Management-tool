@@ -1,0 +1,81 @@
+
+<project name="designConf" default="compile" basedir=".">
+
+  <property name="build.compiler"              value="modern"/>
+  <property name="src"                  value="src"/>
+  <property name="BUILD"                value="build"/>
+  <property name="classes"              value="${BUILD}/classes"/>
+  <property name="build.sysclasspath" value="last"/>
+
+  <target name="compile"
+          depends="designConf"/>
+
+  <target name="clean">
+       <delete dir="${BUILD}"/>
+  </target>
+
+  <!-- Prepare target directories -->
+  <target name="prepare">
+        <mkdir dir="${BUILD}"/>
+        <mkdir dir="${classes}"/>
+  </target>
+
+
+  <!-- ** means all subdirectories as well -->
+  <!-- * means all files in the current directory -->
+  <!-- for just java files use *.java -->
+
+  <target name="designConf" depends="prepare">
+    <javac srcdir="${src}"
+           includes="designConf/**"
+           excludes="**/package.html"
+           destdir="${classes}"
+           classpath="${classes}"
+           debug="on"
+           optimize="on"
+           deprecation="off"/>
+  </target>
+
+ <target name="jar">
+        <mkdir dir="${BUILD}/jar"/>
+        <jar destfile="${BUILD}/jar/designConf.jar" basedir="${BUILD}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="designConf.driver.Driver"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+<target name="run" depends="jar">
+        <java jar="${BUILD}/jar/designConf.jar"  fork="true">
+	  <arg value="1"/>
+      
+	 </java>
+	
+    </target>
+
+<target name="copy_files">
+        <mkdir dir="Kuzlu_Pinar_BalachandranMary_Nina_assign2/designConf"/>
+        <copy todir="Kuzlu_Pinar_BalachandranMary_Nina_assign2/designConf"> 
+        <fileset dir=".">
+         <include name="src/**" />         
+        <include name="README.txt" />
+        <include name="build.xml" /> 
+    </fileset>
+    </copy>
+</target>
+
+<target name="purgeArchives" depends="clean"> 
+  <delete file="./Kuzlu_Pinar_BalachandranMary_Nina_assign2.tar" /> 
+  <delete file="./Kuzlu_Pinar_BalachandranMary_Nina_assign2.tar.gz" />
+</target> 
+
+
+<target name="tarzip" depends="purgeArchives,copy_files"> 
+  <tar destfile="./Kuzlu_Pinar_BalachandranMary_Nina_assign2.tar" basedir="./Kuzlu_Pinar_BalachandranMary_Nina_assign2"/> <!-- includes="./Pinar_Kuzlu_Nina Balachandran_Mary_assign2/**" /> -->
+  <gzip destfile="./Kuzlu_Pinar_BalachandranMary_Nina_assign2.tar.gz" src="./Kuzlu_Pinar_BalachandranMary_Nina_assign2.tar"/>
+  <delete file="./Kuzlu_Pinar_BalachandranMary_Nina_assign2.tar" /> 
+  <delete dir="Kuzlu_Pinar_BalachandranMary_Nina_assign2"/>
+</target>
+
+</project>
